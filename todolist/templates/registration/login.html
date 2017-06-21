@@ -1,0 +1,49 @@
+{% load staticfiles %}
+
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/style.css' %}" />
+    <title>ToDo</title>
+</head>
+
+<body>
+{% csrf_token %}
+<span class="admin_page">Create users here: <a href="/admin">Admin page.</a></span>
+<br>
+<div class="wrapper">
+    {% block content %}
+
+    {% if form.errors %}
+    <p style="color: red;">Wrong credentials. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>Your account doesn't have access to this page. To proceed,
+            please login with an account that has access.</p>
+        {% else %}
+            <p>Please, log in to enter the ToDo list.</p>
+        {% endif %}
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+    <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+    </tr>
+    </table>
+
+    <input type="submit" value="login" />
+    <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+    {% endblock %}
+</div>
+</body>
