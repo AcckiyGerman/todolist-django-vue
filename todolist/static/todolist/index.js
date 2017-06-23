@@ -1,8 +1,10 @@
-var app = new Vue({
-    // Do not fight with Django for tags
+var projectsView = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#app',
-    data: {
-        message: 'Hello Vue!'
+    el: '#projectsView',
+    data : {
+        projectsList: [
+            { name: '1-st project'},
+            { name: '2-nd project'}
+        ]
     }
 });
