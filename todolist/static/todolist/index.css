@@ -1,0 +1,27 @@
+
+#header {
+    background-color: lightblue;
+    padding: 10px;
+}
+
+#logout {
+    float: right;
+}
+
+#flex-container {
+    background-color: lightgrey;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    overflow: auto;
+}
+
+#projectsView {
+    width: 300px;
+}
+
+#tasksView {
+    width: 50%;
+    background-color: white;
+}

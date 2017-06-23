@@ -3,11 +3,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/index.css' %}" />
     <title>Title</title>
 </head>
 <body>
-    <a href="{% url 'logout' %}">Logout.</a>
-{#-------------Vue frontend-----------------#}
+<div id="header">
+    <span>TODO</span>
+    <span id="logout">
+        <a href="{% url 'logout' %}">Logout</a>
+    </span>
+</div>
 <div id="flex-container">
     <div id="projectsView">
         <ul>
@@ -25,7 +30,7 @@
         </ul>
     </div>
 </div>
-{#--------------- end Vue ------------------#}
+
 </body>
 <script src="{% static 'todolist/jquery-3.2.1.js' %}"></script>
 <script src="{% static 'todolist/vue@2.3.4.js' %}"></script>
