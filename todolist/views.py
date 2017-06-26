@@ -15,7 +15,7 @@ def index(request):
 def projects_list(request):
     """returns all projects in json format"""
     json_data = json.dumps(
-        [{'name': p.name, 'colour': p.colour}
+        [{'name': p.name, 'colour': p.colour, 'id': p.id}
          for p in Project.objects.all()]
     )
 

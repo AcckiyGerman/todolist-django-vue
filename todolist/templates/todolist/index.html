@@ -4,17 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="{% static 'todolist/index.css' %}" />
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Title</title>
 </head>
 <body>
 <div id="header">
     <span>TODO</span>
-    <span id="logout">
+    <span class="float-right">
         <a href="{% url 'logout' %}">Logout</a>
     </span>
 </div>
-<div id="flex-container">
-    <div id="projectsView">
+
+<div class="flex content-wrapper">
+
+    <div id="projects-column">
         <ul>
             <li v-for="project in projectsList">
                 [[ project.name ]], [[ project.colour ]]
@@ -22,11 +26,13 @@
         </ul>
     </div>
 
-    <div id="tasksView">
+    <div id="tasks-column">
         <ul>
             <li v-for="task in tasksList">
                 [[ task.name ]]
+                <hr>
             </li>
+            <span class="add-button">+ Add task</span>
         </ul>
     </div>
 </div>

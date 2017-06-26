@@ -1,6 +1,6 @@
-var projectsView = new Vue({
+var projectsColumn = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#projectsView',
+    el: '#projects-column',
     data : {
         projectsList: []
     },
@@ -11,16 +11,23 @@ var projectsView = new Vue({
         fetchProjectsList: function () {
             var self = this;
             $.getJSON('/projects_list/', {'key':'value'}, function (data) {
-                console.log(data);
+                console.log('get data from server: ', data);
                 self.projectsList = data;
             })
+        },
+        editProject: function (data) {
+            console.log(data);
+            this.projectsList[data].edit=true
+        },
+        deleteProject: function () {
+
         }
     }
 });
 
-var tasksView = new Vue({
+var tasksColumn = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#tasksView',
+    el: '#tasks-column',
     data : {
         tasksList: []
     },
@@ -31,7 +38,7 @@ var tasksView = new Vue({
         fetchTasksList: function () {
             var self = this;
             $.getJSON('/tasks_list/', {'key':'value'}, function (data) {
-                console.log(data);
+                console.log('get data from server: ', data);
                 self.tasksList = data;
             })
         }
