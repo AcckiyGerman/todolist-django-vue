@@ -38,6 +38,22 @@
                    @click="deleteProject(project)"
                 ></i>
             </li>
+            <li>
+                <span v-if="newProject.edit">
+                    <select v-model="newProject.colour" :style="{backgroundColor: newProject.colour}">
+                      <option v-for="color in colors"
+                              v-bind:value="color"
+                              :style="{backgroundColor: color}">
+                        [[ color ]]
+                      </option>
+                    </select>
+
+                    <input v-model="newProject.name" @keyup.enter='addProject'>
+                </span>
+                <span class="add-button" v-else @click="newProject.edit=true">
+                    + Add project
+                </span>
+            </li>
         </ul>
     </div>
 

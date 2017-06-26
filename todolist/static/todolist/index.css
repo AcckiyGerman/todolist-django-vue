@@ -17,7 +17,7 @@
 }
 
 #projects-column {
-    width: 330px;
+    width: 400px;
 }
 
 #tasks-column {
@@ -57,4 +57,8 @@ ul {
 
 .add-button {
     color: red;
+}
+
+select {
+    display: inline-block;
 }

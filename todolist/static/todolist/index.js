@@ -2,7 +2,13 @@ var projectsColumn = new Vue({
     delimiters: ['[[', ']]'],
     el: '#projects-column',
     data : {
-        projectsList: []
+        projectsList: [],
+        newProject: {
+            edit: false,
+            name: '',
+            colour: 'yellow'
+        },
+        colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']
     },
     mounted: function () {
         this.fetchProjectsList();
@@ -17,6 +23,10 @@ var projectsColumn = new Vue({
                 projects.forEach(function(project){ project.edit = false });
                 self.projectsList = projects;
             })
+        },
+        addProject: function () {
+            var self = this;
+            $.ajax('/add_project/')
         },
         saveProject: function (project) {
             // send edited data to server
