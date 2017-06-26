@@ -10,14 +10,17 @@ var projectsColumn = new Vue({
     methods: {
         fetchProjectsList: function () {
             var self = this;
-            $.getJSON('/projects_list/', {'key':'value'}, function (data) {
-                console.log('get data from server: ', data);
-                self.projectsList = data;
+            $.getJSON('/projects_list/', {'key':'value'}, function (projects) {
+                console.log('Got projects list from server: ', projects);
+                console.log('Adding "edit=false" flag to each project.');
+                // project.edit - boolean flag, showing if the project is in edit state.
+                projects.forEach(function(project){ project.edit = false });
+                self.projectsList = projects;
             })
         },
-        editProject: function (data) {
-            console.log(data);
-            this.projectsList[data].edit=true
+        saveProject: function (project) {
+            // send edited data to server
+            project.edit=!project.edit;
         },
         deleteProject: function () {
 

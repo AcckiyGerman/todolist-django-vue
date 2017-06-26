@@ -21,7 +21,15 @@
     <div id="projects-column">
         <ul>
             <li v-for="project in projectsList">
-                [[ project.name ]], [[ project.colour ]]
+                <input v-model="project.name" v-if=project.edit
+                       @keyup.enter='saveProject(project)'>
+                <span v-else>[[ project.name ]]</span>
+                <i class="fa fa-pencil-square-o" aria-hidden="true"
+                   v-if="!project.edit"
+{#                 # this will start project editing: #}
+                   @click="project.edit = true"
+                ></i>
+                <i class="fa fa-trash-o" aria-hidden="true"></i>
             </li>
         </ul>
     </div>
