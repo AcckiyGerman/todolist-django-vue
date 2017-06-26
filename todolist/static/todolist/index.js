@@ -22,8 +22,8 @@ var projectsColumn = new Vue({
             // send edited data to server
             project.edit=!project.edit;
         },
-        deleteProject: function () {
-
+        deleteProject: function (project) {
+            alert('user wants to delete project')
         }
     }
 });

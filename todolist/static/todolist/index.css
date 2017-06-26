@@ -17,7 +17,7 @@
 }
 
 #projects-column {
-    width: 300px;
+    width: 330px;
 }
 
 #tasks-column {
@@ -49,8 +49,7 @@ ul {
 .circle {
 	width: 15px;
 	height: 15px;
-	/*background: red;*/
-    border: 1px solid;
+    display: inline-block;
 	-moz-border-radius: 50px;
 	-webkit-border-radius: 50px;
 	border-radius: 50px;
