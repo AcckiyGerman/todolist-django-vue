@@ -21,17 +21,26 @@
     <div id="projects-column">
         <ul>
             <li v-for="project in projectsList">
-{#              TODO: place for project color edit menu #}
-                <input v-model="project.name" v-if=project.edit
+                {# Form to edit existing project. #}
+                <span v-if="project.edit">
+                <select v-model="project.colour" class="color-select"
+                        :style="{backgroundColor: project.colour}">
+                    <option v-for="color in colors" :value="color"
+                            :style="{backgroundColor: color}">
+                    </option>
+                </select>
+                <input v-model="project.name"
                        @keyup.enter='saveProject(project)'>
+                </span>
+                {# show existing project #}
                 <span v-else>
                     <div class="circle" :style="{backgroundColor: project.colour}"></div>
                     [[ project.name ]]
                 </span>
-{#              'Edit' and 'delete' icons from 'font-awesome' pack  #}
+                {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                 <i class="fa fa-pencil-square-o" aria-hidden="true"
                    v-if="!project.edit"
-{#                 # next handler will start project editing: #}
+{#                 # next handler will start existing project edit: #}
                    @click="project.edit = true"
                 ></i>
                 <i class="fa fa-trash-o" aria-hidden="true"
@@ -39,13 +48,13 @@
                 ></i>
             </li>
             <li>
+{#              Form to make a new project: #}
                 <span v-if="newProject.edit">
-                    <select v-model="newProject.colour" :style="{backgroundColor: newProject.colour}">
-                      <option v-for="color in colors"
-                              v-bind:value="color"
-                              :style="{backgroundColor: color}">
-                        [[ color ]]
-                      </option>
+                    <select v-model="newProject.colour" class="color-select"
+                            :style="{backgroundColor: newProject.colour}">
+                        <option v-for="color in colors" :value="color"
+                                :style="{backgroundColor: color}">
+                        </option>
                     </select>
 
                     <input v-model="newProject.name" @keyup.enter='addProject'>

@@ -17,7 +17,8 @@
 }
 
 #projects-column {
-    width: 400px;
+    max-width: 400px;
+    min-width: 320px;
 }
 
 #tasks-column {
@@ -43,15 +44,12 @@ ul {
 	width: 10px;
 	height: 10px;
     border: 1px solid;
-	/*background: red;*/
 }
 
 .circle {
 	width: 15px;
 	height: 15px;
     display: inline-block;
-	-moz-border-radius: 50px;
-	-webkit-border-radius: 50px;
 	border-radius: 50px;
 }
 
@@ -59,6 +57,12 @@ ul {
     color: red;
 }
 
-select {
+.color-select {
     display: inline-block;
+    width: 15px; height: 15px;
+    border: 0px solid;
+    border-radius: 50px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
