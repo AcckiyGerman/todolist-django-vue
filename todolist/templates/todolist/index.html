@@ -59,7 +59,7 @@
                         </option>
                     </select>
 
-                    <input v-model="newProject.name" @keyup.enter='addProject'>
+                    <input v-model="newProject.name" @keyup='newProjectInputHandler'>
                 </span>
                 <span class="add-button" v-else @click="newProject.edit=true">
                     + Add project

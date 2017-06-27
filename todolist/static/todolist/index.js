@@ -34,23 +34,19 @@ var projectsColumn = new Vue({
                 self.projectsList = projects;
             })
         },
+        newProjectInputHandler: function (event) {
+            if (event.key == 'Enter'){ this.addProject() }
+            if (event.key == 'Escape') { this.newProject.edit = false }
+        },
         addProject: function () {
             var self = this;
-            $.ajax({type: "POST", contentType: "application/json; charset=utf-8", dataType: "json",
-                url: "/add_project/",
-                data: JSON.stringify(self.newProject),
-
-                success: function(project){
-                    console.log('successfully uploaded new project:', project);
-                    project.edit = false;
-                    self.projectsList.push(project);
-                    self.newProject.name = '';
-                    self.newProject.edit = false;
-                },
-                failure: function(errMsg) {
-                    alert(errMsg);
-                }
-            });
+            this.jsonToServer('/add_project/', this.newProject, function(project){
+                console.log('successfully uploaded new project:', project);
+                project.edit = false;
+                self.projectsList.push(project);
+                self.newProject.name = '';
+                self.newProject.edit = false;
+            })
         },
         saveProject: function (project) {
             // send edited data to server
