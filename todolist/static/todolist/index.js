@@ -57,7 +57,21 @@ var projectsColumn = new Vue({
             project.edit=!project.edit;
         },
         deleteProject: function (project) {
-            console.log('trying to delete project:', project.name)
+            console.log('trying to delete project:', project.name);
+            this.jsonToServer('/delete_project/', project.id, function(response) {
+                console.log('server reply:', response);
+            });
+            this.fetchProjectsList();
+        },
+        jsonToServer: function (address, data, successFunction) {
+            $.ajax({type: "POST", contentType: "application/json; charset=utf-8", dataType: "json",
+                url: address,
+                data: JSON.stringify(data),
+                success: successFunction,
+                failure: function(errMsg) {
+                    alert(errMsg);
+                }
+            })
         }
     }
 });

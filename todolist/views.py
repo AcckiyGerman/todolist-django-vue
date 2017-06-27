@@ -31,6 +31,12 @@ def add_project(request):
     )
 
 
+def delete_project(request):
+    project_id = json.loads(request.body.decode('utf-8'))
+    Project.objects.filter(id=project_id).delete()
+    return HttpResponse(json.dumps('project deleted.'), content_type='application/json')
+
+
 def tasks_list(request):
     """returns all tasks in json format"""
     json_data = json.dumps(
