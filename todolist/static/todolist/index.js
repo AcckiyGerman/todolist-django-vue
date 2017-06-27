@@ -17,8 +17,7 @@ var projectsColumn = new Vue({
     el: '#projects-column',
     data : {
         projectsList: [],
-        newProject: {edit: false, name: '', colour: 'blue'},
-        defaultProject: { name: '', colour: 'blue', edit: false},
+        newProject: {name: '', colour: 'blue', edit: false},
         colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']
     },
     mounted: function () {
@@ -37,21 +36,16 @@ var projectsColumn = new Vue({
         },
         addProject: function () {
             var self = this;
-            var dataToSend = {
-                name: this.newProject.name,
-                colour: this.newProject.colour
-            };
-            $.ajax({
-                type: "POST",
+            $.ajax({type: "POST", contentType: "application/json; charset=utf-8", dataType: "json",
                 url: "/add_project/",
-                data: JSON.stringify(dataToSend),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
+                data: JSON.stringify(self.newProject),
+
                 success: function(project){
                     console.log('successfully uploaded new project:', project);
                     project.edit = false;
                     self.projectsList.push(project);
-                    self.newProject = self.defaultProject;
+                    self.newProject.name = '';
+                    self.newProject.edit = false;
                 },
                 failure: function(errMsg) {
                     alert(errMsg);
@@ -63,7 +57,7 @@ var projectsColumn = new Vue({
             project.edit=!project.edit;
         },
         deleteProject: function (project) {
-            alert('user wants to delete project')
+            console.log('trying to delete project:', project.name)
         }
     }
 });
