@@ -25,14 +25,16 @@
             <li v-for="project in projectsList">
                 {# Form to edit existing project. #}
                 <span v-if="project.edit">
-                <select v-model="project.colour" class="color-select"
-                        :style="{backgroundColor: project.colour}">
-                    <option v-for="color in colors" :value="color"
-                            :style="{backgroundColor: color}">
-                    </option>
-                </select>
-                <input v-model="project.name"
-                       @keyup.enter='saveProject(project)'>
+                    <select v-model="project.colour" class="color-select"
+                            :style="{backgroundColor: project.colour}">
+                        <option v-for="color in colors" :value="color"
+                                :style="{backgroundColor: color}">
+                        </option>
+                    </select>
+                    <input v-model="project.name"
+                           @keyup.enter='updateProject(project)'
+                           maxlength="20"
+                    >
                 </span>
                 {# show existing project #}
                 <span v-else>
@@ -45,9 +47,7 @@
 {#                 # next handler will start existing project edit: #}
                    @click="project.edit = true"
                 ></i>
-                <i class="fa fa-trash-o" aria-hidden="true"
-                   @click="deleteProject(project)"
-                ></i>
+                <i class="fa fa-trash-o" aria-hidden="true" @click="deleteProject(project)"></i>
             </li>
             <li>
 {#              Form to make a new project: #}
@@ -59,7 +59,7 @@
                         </option>
                     </select>
 
-                    <input v-model="newProject.name" @keyup='newProjectInputHandler'>
+                    <input v-model="newProject.name" @keyup='newProjectInputHandler' maxlength="20">
                 </span>
                 <span class="add-button" v-else @click="newProject.edit=true">
                     + Add project

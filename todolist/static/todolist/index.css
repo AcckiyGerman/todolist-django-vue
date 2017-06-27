@@ -66,3 +66,6 @@ ul {
     -moz-appearance: none;
     appearance: none;
 }
+input {
+    width: 160px;
+}

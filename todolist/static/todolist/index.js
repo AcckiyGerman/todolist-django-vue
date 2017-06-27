@@ -29,7 +29,7 @@ var projectsColumn = new Vue({
             $.getJSON('/projects_list/', {'key':'value'}, function (projects) {
                 console.log('Got projects list from server: ', projects);
                 console.log('Adding "edit=false" flag to each project.');
-                // project.edit - boolean flag, showing if the project is in edit state.
+                // project.edit - when true - will show project edit form (using vue v-if)
                 projects.forEach(function(project){ project.edit = false });
                 self.projectsList = projects;
             })
@@ -42,15 +42,20 @@ var projectsColumn = new Vue({
             var self = this;
             this.jsonToServer('/add_project/', this.newProject, function(project){
                 console.log('successfully uploaded new project:', project);
-                project.edit = false;
+                project.edit = false;  // add 'edit' field, need to vue v-bind proper work
                 self.projectsList.push(project);
                 self.newProject.name = '';
                 self.newProject.edit = false;
             })
         },
-        saveProject: function (project) {
+        updateProject: function (project) {
             // send edited data to server
-            project.edit=!project.edit;
+            this.jsonToServer('/update_project/', project, function(response){
+                console.log('server reply:', response);
+                project.edit=!project.edit;
+            });
+
+
         },
         deleteProject: function (project) {
             console.log('trying to delete project:', project.name);
@@ -64,8 +69,8 @@ var projectsColumn = new Vue({
                 url: address,
                 data: JSON.stringify(data),
                 success: successFunction,
-                failure: function(errMsg) {
-                    alert(errMsg);
+                error: function(errMsg) {
+                    alert(errMsg.responseText);
                 }
             })
         }
