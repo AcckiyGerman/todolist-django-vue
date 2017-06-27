@@ -18,8 +18,17 @@ def projects_list(request):
         [{'name': p.name, 'colour': p.colour, 'id': p.id}
          for p in Project.objects.all()]
     )
-
     return HttpResponse(json_data, content_type='application/json')
+
+
+def add_project(request):
+    new_project = json.loads(request.body.decode('utf-8'))
+    p = Project(name=new_project['name'], colour=new_project['colour'])
+    p.save()
+    return HttpResponse(
+        json.dumps({'name': p.name, 'colour': p.colour, 'id': p.id}),
+        content_type='application/json'
+    )
 
 
 def tasks_list(request):
