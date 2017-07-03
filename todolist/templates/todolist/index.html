@@ -90,7 +90,9 @@
                     <span><div class="square" :style="{backgroundColor: task.priority}"></div>
                                         [[ task.name ]]</span>
 
-                    <span>PROJECT, COLOR
+                    <span>
+                        [[ task.project ]]
+                        <div class="circle" :style="{backgroundColor: task.project_color}"></div>
                         {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                         <i class="fa fa-pencil-square-o" aria-hidden="true"
                            v-if="!task.edit"

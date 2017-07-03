@@ -64,6 +64,8 @@ def tasks_list(request):
     json_data = json.dumps(
         [{'name': t.name,
           'project_id': t.project_id,
+          'project': t.project.name,
+          'project_color': t.project.colour,
           'priority': t.priority,
           'date_to_finish': str(t.date_to_finish),
           'finished': t.finished}
