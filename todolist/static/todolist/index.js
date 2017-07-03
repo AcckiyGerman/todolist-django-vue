@@ -11,6 +11,16 @@ $.ajaxSetup({
         }
     }
 });
+function jsonToServer(address, data, successFunction) {
+            $.ajax({type: "POST", contentType: "application/json; charset=utf-8", dataType: "json",
+                url: address,
+                data: JSON.stringify(data),
+                success: successFunction,
+                error: function(errMsg) {
+                    alert(errMsg.responseText);
+                }
+            })
+        }
 
 var projectsColumn = new Vue({
     delimiters: ['[[', ']]'],
@@ -24,9 +34,9 @@ var projectsColumn = new Vue({
         this.fetchProjectsList();
     },
     methods: {
-        fetchProjectsList: function () {
+        fetchProjectsList: function (filter) {
             var self = this;
-            $.getJSON('/projects_list/', {'key':'value'}, function (projects) {
+            jsonToServer('/projects_list/', {filter: filter}, function (projects) {
                 console.log('Got projects list from server: ', projects);
                 console.log('Adding "edit=false" flag to each project.');
                 // project.edit - when true - will show project edit form (using vue v-if)
@@ -40,7 +50,7 @@ var projectsColumn = new Vue({
         },
         addProject: function () {
             var self = this;
-            this.jsonToServer('/add_project/', this.newProject, function(project){
+            jsonToServer('/add_project/', this.newProject, function(project){
                 console.log('successfully uploaded new project:', project);
                 project.edit = false;  // add 'edit' field, need to vue v-bind proper work
                 self.projectsList.push(project);
@@ -50,7 +60,7 @@ var projectsColumn = new Vue({
         },
         updateProject: function (project) {
             // send edited data to server
-            this.jsonToServer('/update_project/', project, function(response){
+            jsonToServer('/update_project/', project, function(response){
                 console.log('server reply:', response);
                 project.edit=!project.edit;
             });
@@ -59,20 +69,10 @@ var projectsColumn = new Vue({
         },
         deleteProject: function (project) {
             console.log('trying to delete project:', project.name);
-            this.jsonToServer('/delete_project/', project.id, function(response) {
+            jsonToServer('/delete_project/', project.id, function(response) {
                 console.log('server reply:', response);
             });
             this.fetchProjectsList();
-        },
-        jsonToServer: function (address, data, successFunction) {
-            $.ajax({type: "POST", contentType: "application/json; charset=utf-8", dataType: "json",
-                url: address,
-                data: JSON.stringify(data),
-                success: successFunction,
-                error: function(errMsg) {
-                    alert(errMsg.responseText);
-                }
-            })
         }
     }
 });
@@ -91,8 +91,8 @@ var tasksColumn = new Vue({
     methods: {
         fetchTasksList: function (filter) {
             var self = this;
-            $.getJSON('/tasks_list/', {filter: filter}, function (tasks) {
-                console.log('get data from server: ', tasks);
+            jsonToServer('/tasks_list/', {filter: filter}, function (tasks) {
+                console.log('get tasks list from server: ', tasks);
                 // task.edit - when true - will show project edit form (using vue v-if)
                 tasks.forEach(function(task){ task.edit = false });
                 self.tasksList = tasks;
