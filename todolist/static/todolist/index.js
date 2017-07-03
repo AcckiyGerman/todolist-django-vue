@@ -81,17 +81,21 @@ var tasksColumn = new Vue({
     delimiters: ['[[', ']]'],
     el: '#tasks-column',
     data : {
-        tasksList: []
+        tasksList: [],
+        newTask: {name: '', project_id: 0, priority: 'white', date_to_finish: '', finished: false, edit: false},
+        priorities: ['white', 'orange', 'red']
     },
     mounted: function () {
         this.fetchTasksList();
     },
     methods: {
-        fetchTasksList: function () {
+        fetchTasksList: function (filter) {
             var self = this;
-            $.getJSON('/tasks_list/', {'key':'value'}, function (data) {
-                console.log('get data from server: ', data);
-                self.tasksList = data;
+            $.getJSON('/tasks_list/', {filter: filter}, function (tasks) {
+                console.log('get data from server: ', tasks);
+                // task.edit - when true - will show project edit form (using vue v-if)
+                tasks.forEach(function(task){ task.edit = false });
+                self.tasksList = tasks;
             })
         }
     }

@@ -62,7 +62,12 @@ def delete_project(request):
 def tasks_list(request):
     """returns all tasks in json format"""
     json_data = json.dumps(
-        [{'name': t.name} for t in Task.objects.all()]
+        [{'name': t.name,
+          'project_id': t.project_id,
+          'priority': t.priority,
+          'date_to_finish': str(t.date_to_finish),
+          'finished': t.finished}
+         for t in Task.objects.all()]
     )
     return HttpResponse(json_data, content_type='application/json')
 
