@@ -125,7 +125,18 @@
                            @keyup='newTaskInputHandler'
                            maxlength="20"
                            placeholder="New task name">
-                    <input id="datepicker" class="date" placeholder="Finish date">
+                    <input id="datepicker" class="date" placeholder="Finish date"
+                            v-bind:value="newTask.finish_date"
+                            v-on:input="newTask.finish_date = $event.target.value">
+
+                    <select v-model="newTask.project_id">
+                        <option v-for="project in projectsList" :value="project.id">
+                            [[ project.name ]]
+                        </option>
+                    </select>
+                    <span>[[ newTask ]]</span>
+
+
                 </form>
                 <span class="add-button" v-else @click="newTask.edit=true">
                     + Add task

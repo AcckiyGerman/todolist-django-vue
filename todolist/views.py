@@ -78,6 +78,8 @@ def tasks_list(request):
 def check_project(project):
     if len(project['name']) > 20:
         return 'name is too long'
+    if len(project['name']) < 3:
+        return 'name is too short'
     if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
         return 'wrong color'
     return 'ok'

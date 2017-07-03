@@ -23,11 +23,14 @@ function jsonToServer(address, data, successFunction) {
         }
 $( function() { $( "#datepicker" ).datepicker() } );
 
+// Shared list of Projects:
+const globalProjectsList = [];
+
 var projectsColumn = new Vue({
     delimiters: ['[[', ']]'],
     el: '#projects-column',
     data : {
-        projectsList: [],
+        projectsList: globalProjectsList,
         newProject: {name: '', colour: 'blue', edit: false},
         colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']
     },
@@ -40,9 +43,12 @@ var projectsColumn = new Vue({
             jsonToServer('/projects_list/', {filter: filter}, function (projects) {
                 console.log('Got projects list from server: ', projects);
                 console.log('Adding "edit=false" flag to each project.');
-                // project.edit - when true - will show project edit form (using vue v-if)
-                projects.forEach(function(project){ project.edit = false });
-                self.projectsList = projects;
+                self.projectsList.length = 0; // clear projects list
+                projects.forEach(function(project){
+                    // project.edit - when true - will show project edit form (using vue v-if)
+                    project.edit = false;
+                    self.projectsList.push(project)
+                });
             })
         },
         newProjectInputHandler: function (event) {
@@ -83,8 +89,9 @@ var tasksColumn = new Vue({
     el: '#tasks-column',
     data : {
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'white', date_to_finish: '', finished: false, edit: true},
-        priorities: ['red', 'orange', 'white']
+        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', edit: true},
+        priorities: ['red', 'orange', 'white'],
+        projectsList: globalProjectsList
     },
     mounted: function () {
         this.fetchTasksList();
