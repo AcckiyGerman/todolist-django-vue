@@ -25,7 +25,7 @@
             <li v-for="project in projectsList">
                 {# Form to edit existing project. #}
                 <span v-if="project.edit">
-                    <select v-model="project.colour" class="color-select"
+                    <select v-model="project.colour" class="color-select circle"
                             :style="{backgroundColor: project.colour}">
                         <option v-for="color in colors" :value="color"
                                 :style="{backgroundColor: color}">
@@ -52,7 +52,7 @@
             <li>
 {#              Form to make a new project: #}
                 <span v-if="newProject.edit">
-                    <select v-model="newProject.colour" class="color-select"
+                    <select v-model="newProject.colour" class="color-select circle"
                             :style="{backgroundColor: newProject.colour}">
                         <option v-for="color in colors" :value="color"
                                 :style="{backgroundColor: color}">
@@ -87,12 +87,15 @@
                 </span>
                 {# show existing task #}
                 <span v-else class="flex task-item">
-                    <span><div class="square" :style="{backgroundColor: task.priority}"></div>
-                                        [[ task.name ]]</span>
-
                     <span>
+                        <div class="square" :style="{backgroundColor: task.priority}"></div>
+                        [[ task.name ]]
+                    </span>
+                    <span>
+                        {# project, related to the task #}
                         [[ task.project ]]
                         <div class="circle" :style="{backgroundColor: task.project_color}"></div>
+
                         {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                         <i class="fa fa-pencil-square-o" aria-hidden="true"
                            v-if="!task.edit"
@@ -107,7 +110,7 @@
             <li>
 {#              Form to make a new task: #}
                 <span v-if="newTask.edit">
-                    <select v-model="newTask.priority" class="color-select"
+                    <select v-model="newTask.priority" class="color-select square"
                             :style="{backgroundColor: newTask.priority}">
                         <option v-for="priority in priorities" :value="priority"
                                 :style="{backgroundColor: priority}">
