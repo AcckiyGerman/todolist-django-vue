@@ -70,13 +70,53 @@
 
     <div id="tasks-column">
         <ul>
+            <li>Tasks:</li>
             <li v-for="task in tasksList">
-                [[ task.name ]]
-                <hr>
+                {# Form to edit existing task. #}
+                <span v-if="task.edit">
+                    <select v-model="task.priority" class="color-select"
+                            :style="{backgroundColor: task.priority}">
+                        <option v-for="priority in priorities" :value="priority"
+                                :style="{backgroundColor: priority}">
+                        </option>
+                    </select>
+                    <input v-model="task.name"
+                           @keyup.enter='updateTask(task)'
+                           maxlength="20"
+                    >
+                </span>
+                {# show existing task #}
+                <span v-else>
+                    <div class="square" :style="{backgroundColor: task.priority}"></div>
+                    [[ task.name ]], PROJECT, PROJECT_COLOR
+                </span>
+                {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
+                <i class="fa fa-pencil-square-o" aria-hidden="true"
+                   v-if="!task.edit"
+{#                 # next handler will start existing task edit: #}
+                   @click="task.edit = true"
+                ></i>
+                <i class="fa fa-trash-o" aria-hidden="true" @click="deleteTask(task)"></i>
             </li>
-            <span class="add-button">+ Add task</span>
+            <li>
+{#              Form to make a new task: #}
+                <span v-if="newTask.edit">
+                    <select v-model="newTask.priority" class="color-select"
+                            :style="{backgroundColor: newTask.priority}">
+                        <option v-for="priority in priorities" :value="priority"
+                                :style="{backgroundColor: priority}">
+                        </option>
+                    </select>
+
+                    <input v-model="newTask.name" @keyup='newTaskInputHandler' maxlength="20">
+                </span>
+                <span class="add-button" v-else @click="newTask.edit=true">
+                    + Add task
+                </span>
+            </li>
         </ul>
     </div>
+
 </main>
 
 </body>
