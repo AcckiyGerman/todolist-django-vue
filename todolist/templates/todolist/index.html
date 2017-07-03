@@ -6,6 +6,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'todolist/index.css' %}" />
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     <title>Title</title>
 </head>
 <body>
@@ -109,16 +111,22 @@
             </li>
             <li>
 {#              Form to make a new task: #}
-                <span v-if="newTask.edit">
-                    <select v-model="newTask.priority" class="color-select square"
-                            :style="{backgroundColor: newTask.priority}">
-                        <option v-for="priority in priorities" :value="priority"
-                                :style="{backgroundColor: priority}">
-                        </option>
-                    </select>
+                <form v-if="newTask.edit">
+                    <label>Priority:
+                        <select v-model="newTask.priority" class="color-select square"
+                                :style="{backgroundColor: newTask.priority}">
+                            <option v-for="priority in priorities" :value="priority"
+                                    :style="{backgroundColor: priority}">
+                            </option>
+                        </select>
+                    </label>
 
-                    <input v-model="newTask.name" @keyup='newTaskInputHandler' maxlength="20">
-                </span>
+                    <input v-model="newTask.name"
+                           @keyup='newTaskInputHandler'
+                           maxlength="20"
+                           placeholder="New task name">
+                    <input id="datepicker" class="date" placeholder="Finish date">
+                </form>
                 <span class="add-button" v-else @click="newTask.edit=true">
                     + Add task
                 </span>
@@ -130,6 +138,7 @@
 
 </body>
 <script src="{% static 'todolist/jquery-3.2.1.js' %}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="{% static 'todolist/vue@2.3.4.js' %}"></script>
 <script src="{% static 'todolist/index.js' %}"></script>
 </html>

@@ -28,6 +28,7 @@
 
 ul {
     list-style-type: none;
+    padding-left: 10px;
 }
 
 .flex {
@@ -36,13 +37,12 @@ ul {
 
 .task-item {
     justify-content: space-between;
-    align-items: baseline;
 }
 
 
 .square {
-	width: 10px;
-	height: 10px;
+	width: 12px;
+	height: 12px;
     border: 0.5px solid;
     display: inline-block;
 }
@@ -69,4 +69,8 @@ ul {
 }
 input {
     width: 160px;
+}
+
+.date {
+    width: 80px;
 }

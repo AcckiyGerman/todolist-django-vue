@@ -21,6 +21,7 @@ function jsonToServer(address, data, successFunction) {
                 }
             })
         }
+$( function() { $( "#datepicker" ).datepicker() } );
 
 var projectsColumn = new Vue({
     delimiters: ['[[', ']]'],
@@ -82,8 +83,8 @@ var tasksColumn = new Vue({
     el: '#tasks-column',
     data : {
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'white', date_to_finish: '', finished: false, edit: false},
-        priorities: ['white', 'orange', 'red']
+        newTask: {name: '', project_id: 0, priority: 'white', date_to_finish: '', finished: false, edit: true},
+        priorities: ['red', 'orange', 'white']
     },
     mounted: function () {
         this.fetchTasksList();
@@ -97,6 +98,10 @@ var tasksColumn = new Vue({
                 tasks.forEach(function(task){ task.edit = false });
                 self.tasksList = tasks;
             })
-        }
+        },
+        newTaskInputHandler: function (event) {
+            if (event.key == 'Enter'){ this.addTask() }
+            if (event.key == 'Escape') { this.newTask.edit = false }
+        },
     }
 });
