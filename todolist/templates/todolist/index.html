@@ -86,17 +86,21 @@
                     >
                 </span>
                 {# show existing task #}
-                <span v-else>
-                    <div class="square" :style="{backgroundColor: task.priority}"></div>
-                    [[ task.name ]], PROJECT, PROJECT_COLOR
+                <span v-else class="flex task-item">
+                    <span><div class="square" :style="{backgroundColor: task.priority}"></div>
+                                        [[ task.name ]]</span>
+
+                    <span>PROJECT, COLOR
+                        {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"
+                           v-if="!task.edit"
+                           {# next handler will start existing task edit: #}
+                           @click="task.edit = true"
+                        ></i>
+                        <i class="fa fa-trash-o" aria-hidden="true" @click="deleteTask(task)"></i>
+                    </span>
                 </span>
-                {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
-                <i class="fa fa-pencil-square-o" aria-hidden="true"
-                   v-if="!task.edit"
-{#                 # next handler will start existing task edit: #}
-                   @click="task.edit = true"
-                ></i>
-                <i class="fa fa-trash-o" aria-hidden="true" @click="deleteTask(task)"></i>
+                <hr>
             </li>
             <li>
 {#              Form to make a new task: #}
