@@ -86,7 +86,7 @@ ul {
     appearance: none;
 }
 input[type="text"] {
-    width: 140px;
+    width: 100px;
 }
 
 input[type="date"] {

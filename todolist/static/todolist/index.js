@@ -87,12 +87,13 @@ var tasksColumn = new Vue({
     el: '#tasks-column',
     data : {
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', finished: false, edit: false},
+        newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
         priorities: ['red', 'orange', 'white'],
         projectsList: globalProjectsList
     },
     mounted: function () {
         this.fetchTasksList();
+        this.initDate();
     },
     methods: {
         fetchTasksList: function (filter) {
@@ -127,6 +128,17 @@ var tasksColumn = new Vue({
                 console.log('server reply:', response);
             });
             this.fetchTasksList();
+        },
+        initDate: function () {
+            // fills newTask date for example
+            // need for Mozilla because it not fully supports html5 <input type=date>
+            var date = new Date;
+            var year = date.getFullYear().toString(10);
+            var month = (date.getMonth() + 1).toString(10);
+            if (month.length == 1) { month = '0' + month }
+            var day = date.getDate().toString(10);
+            if (day.length == 1) { day = '0' + day }
+            this.newTask.finish_date = year + '-' + month + '-' + day
         }
     }
 });
