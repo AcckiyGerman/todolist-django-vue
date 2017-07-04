@@ -13,6 +13,8 @@ urlpatterns = [
     # tasks
     url(r'tasks_list/$', views.tasks_list),
     url(r'add_task/$', views.add_task),
+    url(r'update_task/$', views.update_task),
+    url(r'delete_task/$', views.delete_task),
     # user auth
     url(r'login/$', auth_views.login, name='login'),
     url(r'logout/$', auth_views.logout,

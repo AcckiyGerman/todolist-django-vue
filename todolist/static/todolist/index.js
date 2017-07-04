@@ -70,8 +70,6 @@ var projectsColumn = new Vue({
                 console.log('server reply:', response);
                 project.edit=!project.edit;
             });
-
-
         },
         deleteProject: function (project) {
             console.log('trying to delete project:', project.name);
@@ -88,7 +86,7 @@ var tasksColumn = new Vue({
     el: '#tasks-column',
     data : {
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', edit: false},
+        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', finished: false, edit: false},
         priorities: ['red', 'orange', 'white'],
         projectsList: globalProjectsList
     },
@@ -114,6 +112,19 @@ var tasksColumn = new Vue({
                 self.tasksList.push(task);
                 self.newTask.edit = false;
             })
+        },
+        updateTask: function (task) {
+            jsonToServer('/update_task/', task, function(response){
+                console.log('server reply:', response);
+                task.edit=false;
+            });
+        },
+        deleteTask: function (task) {
+            console.log('trying to delete task:', task.name);
+            jsonToServer('/delete_task/', task.id, function(response) {
+                console.log('server reply:', response);
+            });
+            this.fetchTasksList();
         }
     }
 });

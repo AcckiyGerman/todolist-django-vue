@@ -64,14 +64,15 @@ def delete_project(request):
 def tasks_list(request):
     """returns all tasks in json format"""
     json_data = json.dumps(
-        [{'name': t.name,
+        [{'id': t.id,
+          'name': t.name,
           'project_id': t.project_id,
           'project': t.project.name,
           'project_color': t.project.colour,
           'priority': t.priority,
           'finish_date': str(t.finish_date),
           'finished': t.finished}
-         for t in Task.objects.all()]
+            for t in Task.objects.all()]
     )
     return HttpResponse(json_data, content_type='application/json')
 
@@ -102,6 +103,27 @@ def check_project(project):
     return 'ok'
 
 
+def update_task(request):
+    task = json.loads(request.body.decode('utf-8'))
+    check_msg = check_task(task)
+    if check_msg != 'ok':
+        return HttpResponseBadRequest(check_msg)
+    t = Task.objects.filter(id=task['id'])[0]
+    t.name = task['name']
+    t.priority = task['priority']
+    year, month, day = map(int, task['finish_date'].split('-'))
+    t.finish_date = datetime.date(year, month, day)
+    t.finished = task['finished']
+    t.save()
+    return HttpResponse(json.dumps('task updated.'), content_type='application/json')
+
+
+def delete_task(request):
+    task_id = json.loads(request.body.decode('utf-8'))
+    Task.objects.filter(id=task_id).delete()
+    return HttpResponse(json.dumps('task deleted.'), content_type='application/json')
+
+
 def check_task(task):
     if len(task['name']) > 20: return 'name is too long'
     if len(task['name']) < 3 : return 'name is too short'
@@ -110,4 +132,5 @@ def check_task(task):
     date = re.compile("^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
     if not re.match(date, task['finish_date']):
         return 'Wrong date, use this format: YYYY-MM-DD'
+    if not type(task['finished']) == bool: return 'wrong finished field'
     return 'ok'
