@@ -133,7 +133,7 @@
                            placeholder="New task name">
                     <input type="date" class="date" placeholder="YYYY-MM-DD" required
                            v-model="newTask.finish_date">
-                    <select v-model="newTask.project_id" required>
+                    <select v-model="newTask.project_id" required title="Select project">
                         <option v-for="project in projectsList" :value="project.id">
                             [[ project.name ]]
                         </option>
