@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
 from todolist.models import Project, Task
-import json, re
+import json
+import re
+import datetime
 
 
 # Create your views here.
@@ -67,7 +69,7 @@ def tasks_list(request):
           'project': t.project.name,
           'project_color': t.project.colour,
           'priority': t.priority,
-          'date_to_finish': str(t.date_to_finish),
+          'finish_date': str(t.finish_date),
           'finished': t.finished}
          for t in Task.objects.all()]
     )
@@ -79,7 +81,16 @@ def add_task(request):
     check_msg = check_task(new_task)
     if check_msg != 'ok':
         return HttpResponseBadRequest(check_msg)
+    t = Task(project_id=new_task['project_id'],
+             name=new_task['name'],
+             priority=new_task['priority'],
+             finished=False)
+    year, month, day = map(int, new_task['finish_date'].split('-'))
+    t.finish_date = datetime.date(year, month, day)
+    t.save()
+
     return HttpResponse(json.dumps(new_task))
+
 
 # help functions (not a view)
 def check_project(project):

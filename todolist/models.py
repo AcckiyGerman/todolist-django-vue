@@ -13,7 +13,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     priority = models.CharField(max_length=20)
-    date_to_finish = models.DateTimeField()
+    finish_date = models.DateField()
     finished = models.BooleanField(default=False)
 
     def __str__(self):
