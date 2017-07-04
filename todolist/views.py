@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
 from todolist.models import Project, Task
-import json
+import json, re
 
 
 # Create your views here.
@@ -74,6 +74,13 @@ def tasks_list(request):
     return HttpResponse(json_data, content_type='application/json')
 
 
+def add_task(request):
+    new_task = json.loads(request.body.decode('utf-8'))
+    check_msg = check_task(new_task)
+    if check_msg != 'ok':
+        return HttpResponseBadRequest(check_msg)
+    return HttpResponse(json.dumps(new_task))
+
 # help functions (not a view)
 def check_project(project):
     if len(project['name']) > 20:
@@ -82,4 +89,15 @@ def check_project(project):
         return 'name is too short'
     if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
         return 'wrong color'
+    return 'ok'
+
+
+def check_task(task):
+    if len(task['name']) > 20: return 'name is too long'
+    if len(task['name']) < 3 : return 'name is too short'
+    if task['priority'] not in ['red', 'orange', 'white']: return 'wrong priority'
+    if not Project.objects.filter(id=task['project_id']) : return 'no such project'
+    date = re.compile("^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
+    if not re.match(date, task['finish_date']):
+        return 'Wrong date, use this format: YYYY-MM-DD'
     return 'ok'

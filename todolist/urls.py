@@ -5,11 +5,14 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    # projects
     url(r'projects_list/$', views.projects_list),
     url(r'add_project/$', views.add_project),
     url(r'update_project/$', views.update_project),
     url(r'delete_project/$', views.delete_project),
+    # tasks
     url(r'tasks_list/$', views.tasks_list),
+    url(r'add_task/$', views.add_task),
     # user auth
     url(r'login/$', auth_views.login, name='login'),
     url(r'logout/$', auth_views.logout,
