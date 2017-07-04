@@ -111,7 +111,8 @@ var tasksColumn = new Vue({
             jsonToServer('/add_task/', this.newTask, function (task){
                 console.log('Success:', task);
                 task.edit = false;
-                self.tasksList.push(task)
+                self.tasksList.push(task);
+                self.newTask.edit = false;
             })
         }
     }
