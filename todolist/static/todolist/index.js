@@ -21,7 +21,6 @@ function jsonToServer(address, data, successFunction) {
                 }
             })
         }
-$( function() { $( "#datepicker" ).datepicker() } );
 
 // Shared list of Projects:
 const globalProjectsList = [];
@@ -95,6 +94,7 @@ var tasksColumn = new Vue({
     },
     mounted: function () {
         this.fetchTasksList();
+        $("#datepicker").datepicker()
     },
     methods: {
         fetchTasksList: function (filter) {
@@ -109,6 +109,9 @@ var tasksColumn = new Vue({
         newTaskInputHandler: function (event) {
             if (event.key == 'Enter'){ this.addTask() }
             if (event.key == 'Escape') { this.newTask.edit = false }
+        },
+        datePicker: function(event){
+            this.newTask.finish_date = event.target.value;
         },
     }
 });
