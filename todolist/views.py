@@ -24,10 +24,9 @@ def projects_list(request):
 
 def add_project(request):
     new_project = json.loads(request.body.decode('utf-8'))
-    # validation
-    check_msg = Project.validate(new_project)
-    if check_msg != 'ok':
-        return HttpResponseBadRequest(check_msg)
+    error_msg = Project.validate(new_project)
+    if error_msg:
+        return HttpResponseBadRequest(error_msg)
 
     p = Project(name=new_project['name'], colour=new_project['colour'])
     p.save()
@@ -39,10 +38,9 @@ def add_project(request):
 
 def update_project(request):
     project = json.loads(request.body.decode('utf-8'))
-    # validation:
-    check_msg = Project.validate(project)
-    if check_msg != 'ok':
-        return HttpResponseBadRequest(check_msg)
+    error_msg = Project.validate(project)
+    if error_msg:
+        return HttpResponseBadRequest(error_msg)
 
     p = Project.objects.filter(id=project['id'])[0]
     p.name = project['name']
@@ -78,9 +76,9 @@ def tasks_list(request):
 
 def add_task(request):
     new_task = json.loads(request.body.decode('utf-8'))
-    check_msg = Task.validate(new_task)
-    if check_msg != 'ok':
-        return HttpResponseBadRequest(check_msg)
+    error_msg = Task.validate(new_task)
+    if error_msg:
+        return HttpResponseBadRequest(error_msg)
     t = Task(project_id=new_task['project_id'],
              name=new_task['name'],
              priority=new_task['priority'],
@@ -93,9 +91,9 @@ def add_task(request):
 
 def update_task(request):
     task = json.loads(request.body.decode('utf-8'))
-    check_msg = Task.validate(task)
-    if check_msg != 'ok':
-        return HttpResponseBadRequest(check_msg)
+    error_msg = Task.validate(task)
+    if error_msg:
+        return HttpResponseBadRequest(error_msg)
     t = Task.objects.filter(id=task['id'])[0]
     t.name = task['name']
     t.priority = task['priority']

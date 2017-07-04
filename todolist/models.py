@@ -18,7 +18,7 @@ class Project(models.Model):
             return 'name is too short'
         if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
             return 'wrong color'
-        return 'ok'
+        return ''  # no error
 
 
 class Task(models.Model):
@@ -53,4 +53,5 @@ class Task(models.Model):
         if not re.match(date, task['finish_date']):
             return 'Wrong date, use this format: YYYY-MM-DD'
         if not type(task['finished']) == bool: return 'wrong finished field'
-        return 'ok'
+        return ''  # no error
+
