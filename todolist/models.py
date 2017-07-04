@@ -1,5 +1,6 @@
 from django.db import models
 import json
+import re
 
 
 class Project(models.Model):
@@ -8,6 +9,16 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
+
+    @staticmethod
+    def validate(project):
+        if len(project['name']) > 20:
+            return 'name is too long'
+        if len(project['name']) < 3:
+            return 'name is too short'
+        if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
+            return 'wrong color'
+        return 'ok'
 
 
 class Task(models.Model):
@@ -31,3 +42,15 @@ class Task(models.Model):
             'finish_date': str(self.finish_date),
             'finished': self.finished  
         })
+
+    @staticmethod
+    def validate(task):
+        if len(task['name']) > 20: return 'name is too long'
+        if len(task['name']) < 3: return 'name is too short'
+        if task['priority'] not in ['red', 'orange', 'white']: return 'wrong priority'
+        if not Project.objects.filter(id=task['project_id']): return 'no such project'
+        date = re.compile("^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
+        if not re.match(date, task['finish_date']):
+            return 'Wrong date, use this format: YYYY-MM-DD'
+        if not type(task['finished']) == bool: return 'wrong finished field'
+        return 'ok'

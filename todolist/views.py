@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
 from todolist.models import Project, Task
 import json
-import re
 import datetime
 
 
@@ -26,7 +25,7 @@ def projects_list(request):
 def add_project(request):
     new_project = json.loads(request.body.decode('utf-8'))
     # validation
-    check_msg = check_project(new_project)
+    check_msg = Project.validate(new_project)
     if check_msg != 'ok':
         return HttpResponseBadRequest(check_msg)
 
@@ -41,7 +40,7 @@ def add_project(request):
 def update_project(request):
     project = json.loads(request.body.decode('utf-8'))
     # validation:
-    check_msg = check_project(project)
+    check_msg = Project.validate(project)
     if check_msg != 'ok':
         return HttpResponseBadRequest(check_msg)
 
@@ -79,7 +78,7 @@ def tasks_list(request):
 
 def add_task(request):
     new_task = json.loads(request.body.decode('utf-8'))
-    check_msg = check_task(new_task)
+    check_msg = Task.validate(new_task)
     if check_msg != 'ok':
         return HttpResponseBadRequest(check_msg)
     t = Task(project_id=new_task['project_id'],
@@ -94,7 +93,7 @@ def add_task(request):
 
 def update_task(request):
     task = json.loads(request.body.decode('utf-8'))
-    check_msg = check_task(task)
+    check_msg = Task.validate(task)
     if check_msg != 'ok':
         return HttpResponseBadRequest(check_msg)
     t = Task.objects.filter(id=task['id'])[0]
@@ -112,25 +111,3 @@ def delete_task(request):
     Task.objects.filter(id=task_id).delete()
     return HttpResponse(json.dumps('task deleted.'), content_type='application/json')
 
-
-# help functions (not a view)
-def check_project(project):
-    if len(project['name']) > 20:
-        return 'name is too long'
-    if len(project['name']) < 3:
-        return 'name is too short'
-    if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
-        return 'wrong color'
-    return 'ok'
-
-
-def check_task(task):
-    if len(task['name']) > 20: return 'name is too long'
-    if len(task['name']) < 3 : return 'name is too short'
-    if task['priority'] not in ['red', 'orange', 'white']: return 'wrong priority'
-    if not Project.objects.filter(id=task['project_id']) : return 'no such project'
-    date = re.compile("^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$")
-    if not re.match(date, task['finish_date']):
-        return 'Wrong date, use this format: YYYY-MM-DD'
-    if not type(task['finished']) == bool: return 'wrong finished field'
-    return 'ok'
