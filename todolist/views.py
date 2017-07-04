@@ -54,7 +54,13 @@ def update_project(request):
 
 def delete_project(request):
     project_id = json.loads(request.body.decode('utf-8'))
-    Project.objects.filter(id=project_id).delete()
+    project = Project.objects.filter(id=project_id)[0]
+    unfinished_tasks = project.task_set.filter(finished=False)
+    if unfinished_tasks:
+        return HttpResponseBadRequest(
+            'Finish tasks:\n' + '\n'.join([str(t) for t in unfinished_tasks])
+        )
+    project.delete()
     return HttpResponse(json.dumps('project deleted.'), content_type='application/json')
 
 

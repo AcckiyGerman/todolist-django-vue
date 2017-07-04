@@ -77,6 +77,7 @@ var projectsColumn = new Vue({
                 console.log('server reply:', response);
             });
             this.fetchProjectsList();
+            tasksColumn.fetchTasksList()
         }
     }
 });
