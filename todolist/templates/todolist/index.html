@@ -83,8 +83,9 @@
                     <input v-model="task.name"
                            @keyup.enter='updateTask(task)'
                            maxlength="20"
+                           required
                     >
-                    <input v-model="task.finish_date" type="date" class="date">
+                    <input v-model="task.finish_date" type="date" class="date" required>
                     <input type="submit" value="Update">
                 </form>
                 {# show existing task #}
