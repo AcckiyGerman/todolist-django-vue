@@ -73,7 +73,7 @@
             <li>Tasks:</li>
             <li v-for="task in tasksList">
                 {# Form to edit existing task. #}
-                <span v-if="task.edit">
+                <form v-if="task.edit" @submit.prevent="updateTask(task)">
                     <select v-model="task.priority" class="color-select"
                             :style="{backgroundColor: task.priority}">
                         <option v-for="priority in priorities" :value="priority"
@@ -84,7 +84,9 @@
                            @keyup.enter='updateTask(task)'
                            maxlength="20"
                     >
-                </span>
+                    <input v-model="task.finish_date" type="date" class="date">
+                    <input type="submit" value="Update">
+                </form>
                 {# show existing task #}
                 <span v-else class="flex task-item">
                     <span>

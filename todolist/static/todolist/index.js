@@ -114,6 +114,7 @@ var tasksColumn = new Vue({
             })
         },
         updateTask: function (task) {
+            console.log('try to update task:', task);
             jsonToServer('/update_task/', task, function(response){
                 console.log('server reply:', response);
                 task.edit=false;
