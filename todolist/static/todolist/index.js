@@ -88,13 +88,12 @@ var tasksColumn = new Vue({
     el: '#tasks-column',
     data : {
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', edit: true},
+        newTask: {name: '', project_id: 0, priority: 'white', finish_date: '', edit: false},
         priorities: ['red', 'orange', 'white'],
         projectsList: globalProjectsList
     },
     mounted: function () {
         this.fetchTasksList();
-        $("#datepicker").datepicker()
     },
     methods: {
         fetchTasksList: function (filter) {
@@ -106,12 +105,8 @@ var tasksColumn = new Vue({
                 self.tasksList = tasks;
             })
         },
-        newTaskInputHandler: function (event) {
-            if (event.key == 'Enter'){ this.addTask() }
-            if (event.key == 'Escape') { this.newTask.edit = false }
-        },
-        datePicker: function(event){
-            this.newTask.finish_date = event.target.value;
-        },
+        addTask: function () {
+            console.log("add task:", this.newTask)
+        }
     }
 });

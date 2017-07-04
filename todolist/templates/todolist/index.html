@@ -6,8 +6,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'todolist/index.css' %}" />
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
     <title>Title</title>
 </head>
 <body>
@@ -110,8 +108,8 @@
                 <hr>
             </li>
             <li>
-{#              Form to make a new task: #}
-                <form v-if="newTask.edit">
+{#              Add new task form: #}
+                <form v-if="newTask.edit" @submit.prevent="addTask">
                     <label>Priority:
                         <select v-model="newTask.priority" class="color-select square"
                                 :style="{backgroundColor: newTask.priority}">
@@ -120,21 +118,20 @@
                             </option>
                         </select>
                     </label>
-
-                    <input v-model="newTask.name"
-                           @keyup='newTaskInputHandler'
+                    <input v-model="newTask.name" required
                            maxlength="20"
                            placeholder="New task name">
-                    <input id="datepicker" class="date" placeholder="Finish date"
-                           v-model="newTask.finish_date"
-                           onchange="tasksColumn.datePicker(event)"
-                    >
-
-                    <select v-model="newTask.project_id">
+                    <input type="date" class="date" placeholder="YYYY-MM-DD" required
+                           v-model="newTask.finish_date">
+                    <select v-model="newTask.project_id" required>
                         <option v-for="project in projectsList" :value="project.id">
                             [[ project.name ]]
                         </option>
                     </select>
+                    <div class="add-cancel-btn">
+                        <input type="submit" value="Add task">
+                        <button type="reset" @click="newTask.edit=false">Cancel</button>
+                    </div>
                 </form>
                 <span class="add-button" v-else @click="newTask.edit=true">
                     + Add task
@@ -147,7 +144,6 @@
 
 </body>
 <script src="{% static 'todolist/jquery-3.2.1.js' %}"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="{% static 'todolist/vue@2.3.4.js' %}"></script>
 <script src="{% static 'todolist/index.js' %}"></script>
 </html>
