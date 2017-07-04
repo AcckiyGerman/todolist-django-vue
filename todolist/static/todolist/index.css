@@ -33,17 +33,24 @@ ul {
 
 .flex {
     display: flex;
-    align-items: baseline;
 }
 
-.task-item {
+.item-wrapper {
     justify-content: space-between;
+    align-items: baseline;
 }
 
 .finished {
     text-decoration: line-through;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
+.item-wrapper:hover .hidden {
+    visibility: visible;
+}
 
 .square {
 	width: 12px;

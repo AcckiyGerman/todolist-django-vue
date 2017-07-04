@@ -22,6 +22,7 @@
     <div id="projects-column">
         <ul>
             <li>Projects:</li>
+            <hr>
             <li v-for="project in projectsList">
                 {# Form to edit existing project. #}
                 <span v-if="project.edit">
@@ -37,17 +38,21 @@
                     >
                 </span>
                 {# show existing project #}
-                <span v-else>
-                    <div class="circle" :style="{backgroundColor: project.colour}"></div>
-                    [[ project.name ]]
+                <span v-else class="item-wrapper">
+                    <span>
+                        <div class="circle" :style="{backgroundColor: project.colour}"></div>
+                        [[ project.name ]]
+                    </span>
+                    {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
+                    <span class="hidden">
+                        <i class="fa fa-pencil-square-o" aria-hidden="true"
+                           v-if="!project.edit"
+                                {# next handler will start existing project edit: #}
+                           @click="project.edit = true"></i>
+                        <i class="fa fa-trash-o" aria-hidden="true" @click="deleteProject(project)"></i>
+                    </span>
                 </span>
-                {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
-                <i class="fa fa-pencil-square-o" aria-hidden="true"
-                   v-if="!project.edit"
-{#                 # next handler will start existing project edit: #}
-                   @click="project.edit = true"
-                ></i>
-                <i class="fa fa-trash-o" aria-hidden="true" @click="deleteProject(project)"></i>
+                <hr>
             </li>
             <li>
 {#              Form to make a new project: #}
@@ -71,6 +76,7 @@
     <div id="tasks-column">
         <ul>
             <li>Tasks:</li>
+            <hr>
             <li v-for="task in tasksList">
                 {# Form to edit existing task. #}
                 <form v-if="task.edit" @submit.prevent="updateTask(task)">
@@ -89,24 +95,25 @@
                     <input type="submit" value="Update">
                 </form>
                 {# show existing task #}
-                <span v-else class="flex task-item">
+                <span v-else class="flex item-wrapper">
                     <span @click="task.finished=!task.finished; updateTask(task)">
-                        <div class="square" :style="{backgroundColor: task.priority}"></div>
+                        <span class="square" :style="{backgroundColor: task.priority}"></span>
                         <span :class="{'finished' : task.finished}">[[ task.name ]]</span>
                     </span>
-                    <span>
+                    <div>
                         {# project, related to the task #}
                         [[ task.project ]]
                         <div class="circle" :style="{backgroundColor: task.project_color}"></div>
-
                         {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"
-                           v-if="!task.edit"
-                           {# next handler will start existing task edit: #}
-                           @click="task.edit = true"
-                        ></i>
-                        <i class="fa fa-trash-o" aria-hidden="true" @click="deleteTask(task)"></i>
-                    </span>
+                        <span class="hidden">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"
+                               v-if="!task.edit"
+                               {# next handler will start existing task edit: #}
+                               @click="task.edit = true"></i>
+                            <i class="fa fa-trash-o" aria-hidden="true"
+                               @click="deleteTask(task)"></i>
+                        </span>
+                    </div>
                 </span>
                 <hr>
             </li>
