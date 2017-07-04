@@ -91,8 +91,9 @@
                 {# show existing task #}
                 <span v-else class="flex task-item">
                     <span>
+                        <input type="checkbox" v-model="task.finished" @change="updateTask(task)">
                         <div class="square" :style="{backgroundColor: task.priority}"></div>
-                        [[ task.name ]]
+                        <span :class="{'finished' : task.finished}">[[ task.name ]]</span>
                     </span>
                     <span>
                         {# project, related to the task #}

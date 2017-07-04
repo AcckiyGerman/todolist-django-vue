@@ -33,10 +33,15 @@ ul {
 
 .flex {
     display: flex;
+    align-items: baseline;
 }
 
 .task-item {
     justify-content: space-between;
+}
+
+.finished {
+    text-decoration: line-through;
 }
 
 
@@ -73,7 +78,7 @@ ul {
     -moz-appearance: none;
     appearance: none;
 }
-input {
+input[type="text"] {
     width: 140px;
 }
 
