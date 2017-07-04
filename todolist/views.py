@@ -92,17 +92,6 @@ def add_task(request):
     return HttpResponse(t.to_json())
 
 
-# help functions (not a view)
-def check_project(project):
-    if len(project['name']) > 20:
-        return 'name is too long'
-    if len(project['name']) < 3:
-        return 'name is too short'
-    if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
-        return 'wrong color'
-    return 'ok'
-
-
 def update_task(request):
     task = json.loads(request.body.decode('utf-8'))
     check_msg = check_task(task)
@@ -122,6 +111,17 @@ def delete_task(request):
     task_id = json.loads(request.body.decode('utf-8'))
     Task.objects.filter(id=task_id).delete()
     return HttpResponse(json.dumps('task deleted.'), content_type='application/json')
+
+
+# help functions (not a view)
+def check_project(project):
+    if len(project['name']) > 20:
+        return 'name is too long'
+    if len(project['name']) < 3:
+        return 'name is too short'
+    if project['colour'] not in ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']:
+        return 'wrong color'
+    return 'ok'
 
 
 def check_task(task):
