@@ -88,8 +88,7 @@ def add_task(request):
     year, month, day = map(int, new_task['finish_date'].split('-'))
     t.finish_date = datetime.date(year, month, day)
     t.save()
-
-    return HttpResponse(json.dumps(new_task))
+    return HttpResponse(t.to_json())
 
 
 # help functions (not a view)

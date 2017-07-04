@@ -1,4 +1,5 @@
 from django.db import models
+import json
 
 
 class Project(models.Model):
@@ -18,3 +19,15 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+    def to_json(self):
+        return json.dumps({
+            'id': self.id,
+            'name': self.name,
+            'project_id': self.project_id,
+            'project': self.project.name,
+            'project_color': self.project.colour,
+            'priority': self.priority,
+            'finish_date': str(self.finish_date),
+            'finished': self.finished  
+        })
