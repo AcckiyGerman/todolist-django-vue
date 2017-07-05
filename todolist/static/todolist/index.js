@@ -32,7 +32,8 @@ var vue = new Vue({
         tasksList: [],
         newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
         priorities: ['red', 'orange', 'white'],
-        showFinishedTasks: false
+        showFinishedTasks: false,
+        todayDate: ''
     },
     mounted: function () {
         this.fetchProjectsList();
@@ -125,7 +126,32 @@ var vue = new Vue({
             if (month.length == 1) { month = '0' + month }
             var day = date.getDate().toString(10);
             if (day.length == 1) { day = '0' + day }
-            this.newTask.finish_date = year + '-' + month + '-' + day
+            this.todayDate = this.newTask.finish_date = year + '-' + month + '-' + day
+        },
+        reorderTasks : function(tasks) {
+            return tasks
+        }
+    },
+    computed: {
+        reorderedTasks: function() {
+            var tasks = this.tasksList;
+            var self = this;
+            // mark missed deadlines
+            tasks.forEach(function (task) {
+                if ( !task.finished && task.finish_date < self.todayDate ) { task.deadline = true }
+                else { task.deadline = false }
+            });
+            return tasks.sort(function (taskA, taskB) {
+                // sort by deadline
+                if (taskA.deadline > taskB.deadline){ return -1 }
+                if (taskA.deadline < taskB.deadline){ return 1 }
+                // finished lower then unfinished:
+                if (!taskA.finished && taskB.finished){ return -1 }
+                if (taskA.finished && !taskB.finished){ return 1 }
+                // sort by priority
+                var P = {red: 10, orange: 5, white: 1};
+                return P[taskA.priority] < P[taskB.priority];
+            })
         }
     }
 });

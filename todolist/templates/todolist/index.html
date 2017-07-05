@@ -80,7 +80,7 @@
         <ul>
             <li>Tasks:</li>
             <hr>
-            <li v-for="task in tasksList" v-if="(!task.finished || showFinishedTasks)">
+            <li v-for="task in reorderedTasks" v-if="(!task.finished || showFinishedTasks)">
                 {# Form to edit existing task. #}
                 <form v-if="task.edit" @submit.prevent="updateTask(task)">
                     <select v-model="task.priority" class="color-select"
@@ -101,15 +101,17 @@
                 {# show existing task #}
                 <span v-else class="flex item-wrapper">
                     <span @click="task.finished=!task.finished; updateTask(task)">
-                        <span class="square" :style="{backgroundColor: task.priority}"></span>
+                        <span v-if="task.deadline" style="background-color: red">[[ task.finish_date ]]</span>
+                        <span v-if="!task.deadline && !task.finished" class="square" :style="{backgroundColor: task.priority}"></span>
                         <span :class="{'finished' : task.finished}">[[ task.name ]]</span>
                     </span>
-                    <div>
+                    <span>
                         {# project, related to the task #}
                         [[ task.project ]]
                         <div class="circle" :style="{backgroundColor: task.project_color}"></div>
                         {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                         <span class="hidden">
+                            <input type="checkbox" v-model="task.finished">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"
                                v-if="!task.edit"
                                {# next handler will start existing task edit: #}
@@ -117,7 +119,7 @@
                             <i class="fa fa-trash-o" aria-hidden="true"
                                @click="deleteTask(task)"></i>
                         </span>
-                    </div>
+                    </span>
                 </span>
                 <hr>
             </li>
