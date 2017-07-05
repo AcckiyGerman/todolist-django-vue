@@ -24,14 +24,15 @@ function jsonToServer(address, data, successFunction) {
 
 var vue = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#todolist_vue_app',
+    el: '#todolist_spa',
     data : {
         projectsList: [],
         newProject: {name: '', colour: 'blue', edit: false},
         colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white'],
         tasksList: [],
         newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
-        priorities: ['red', 'orange', 'white']
+        priorities: ['red', 'orange', 'white'],
+        showFinishedTasks: false
     },
     mounted: function () {
         this.fetchProjectsList();

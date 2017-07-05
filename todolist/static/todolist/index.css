@@ -2,10 +2,9 @@
 #header {
     background-color: lightblue;
     padding: 10px;
-}
-
-.float-right {
-    float: right;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
 }
 
 .content-wrapper {
