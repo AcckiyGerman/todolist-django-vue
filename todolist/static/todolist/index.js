@@ -22,19 +22,21 @@ function jsonToServer(address, data, successFunction) {
             })
         }
 
-// Shared list of Projects:
-const globalProjectsList = [];
-
-var projectsColumn = new Vue({
+var vue = new Vue({
     delimiters: ['[[', ']]'],
-    el: '#projects-column',
+    el: '#todolist_vue_app',
     data : {
-        projectsList: globalProjectsList,
+        projectsList: [],
         newProject: {name: '', colour: 'blue', edit: false},
-        colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white']
+        colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white'],
+        tasksList: [],
+        newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
+        priorities: ['red', 'orange', 'white']
     },
     mounted: function () {
         this.fetchProjectsList();
+        this.fetchTasksList();
+        this.initDate();
     },
     methods: {
         fetchProjectsList: function (filter) {
@@ -42,7 +44,7 @@ var projectsColumn = new Vue({
             jsonToServer('/projects_list/', {filter: filter}, function (projects) {
                 console.log('Got projects list from server: ', projects);
                 console.log('Adding "edit=false" flag to each project.');
-                self.projectsList.length = 0; // clear projects list
+                self.projectsList = []; // clear projects list
                 projects.forEach(function(project){
                     // project.edit - when true - will show project edit form (using vue v-if)
                     project.edit = false;
@@ -72,30 +74,14 @@ var projectsColumn = new Vue({
             });
         },
         deleteProject: function (project) {
+            var self = this;
             console.log('trying to delete project:', project.name);
             jsonToServer('/delete_project/', project.id, function(response) {
                 console.log('server reply:', response);
+                setTimeout(self.fetchProjectsList(), 100);
+                setTimeout(self.fetchTasksList(), 100);
             });
-            this.fetchProjectsList();
-            tasksColumn.fetchTasksList()
-        }
-    }
-});
-
-var tasksColumn = new Vue({
-    delimiters: ['[[', ']]'],
-    el: '#tasks-column',
-    data : {
-        tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
-        priorities: ['red', 'orange', 'white'],
-        projectsList: globalProjectsList
-    },
-    mounted: function () {
-        this.fetchTasksList();
-        this.initDate();
-    },
-    methods: {
+        },
         fetchTasksList: function (filter) {
             var self = this;
             jsonToServer('/tasks_list/', {filter: filter}, function (tasks) {

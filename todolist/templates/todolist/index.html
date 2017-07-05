@@ -17,7 +17,7 @@
     </span>
 </header>
 
-<main class="flex content-wrapper">
+<main class="flex content-wrapper" id="todolist_vue_app">
 
     <div id="projects-column">
         <ul>
@@ -64,7 +64,7 @@
                         </option>
                     </select>
 
-                    <input v-model="newProject.name" @keyup='newProjectInputHandler' maxlength="20">
+                    <input v-model="newProject.name" @keyup='newProjectInputHandler' maxlength="20" placeholder="Project name">
                 </span>
                 <span class="add-button" v-else @click="newProject.edit=true">
                     + Add project

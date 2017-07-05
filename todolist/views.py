@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest
 from todolist.models import Project, Task
+from django.core.exceptions import ObjectDoesNotExist
 import json
 import datetime
 
@@ -41,8 +42,10 @@ def update_project(request):
     error_msg = Project.validate(project)
     if error_msg:
         return HttpResponseBadRequest(error_msg)
-
-    p = Project.objects.filter(id=project['id'])[0]
+    try:
+        p = Project.objects.get(id=project['id'])
+    except ObjectDoesNotExist:
+        return HttpResponse(json.dumps('object does not exists'))
     p.name = project['name']
     p.colour = project['colour']
     p.save()
@@ -54,13 +57,17 @@ def update_project(request):
 
 def delete_project(request):
     project_id = json.loads(request.body.decode('utf-8'))
-    project = Project.objects.filter(id=project_id)[0]
-    unfinished_tasks = project.task_set.filter(finished=False)
+    try:
+        p = Project.objects.get(id=project_id)
+    except ObjectDoesNotExist:
+        return HttpResponse(json.dumps('object does not exists'))
+
+    unfinished_tasks = p.task_set.filter(finished=False)
     if unfinished_tasks:
         return HttpResponseBadRequest(
             'Finish tasks:\n' + '\n'.join([str(t) for t in unfinished_tasks])
         )
-    project.delete()
+    p.delete()
     return HttpResponse(json.dumps('project deleted.'), content_type='application/json')
 
 
@@ -100,7 +107,10 @@ def update_task(request):
     error_msg = Task.validate(task)
     if error_msg:
         return HttpResponseBadRequest(error_msg)
-    t = Task.objects.filter(id=task['id'])[0]
+    try:
+        t = Task.objects.get(id=task['id'])
+    except ObjectDoesNotExist:
+        return HttpResponse(json.dumps('object does not exists'))
     t.name = task['name']
     t.priority = task['priority']
     year, month, day = map(int, task['finish_date'].split('-'))
