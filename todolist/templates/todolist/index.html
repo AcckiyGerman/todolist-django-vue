@@ -111,7 +111,6 @@
                         <div class="circle" :style="{backgroundColor: task.project_color}"></div>
                         {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                         <span class="hidden">
-                            <input type="checkbox" v-model="task.finished">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"
                                v-if="!task.edit"
                                {# next handler will start existing task edit: #}
