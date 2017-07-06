@@ -22,6 +22,10 @@ function jsonToServer(address, data, successFunction) {
                 }
             })
         }
+function parseDate(date){
+    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1))
+        .slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+};
 
 var vue = new Vue({
     delimiters: ['[[', ']]'],
@@ -35,7 +39,8 @@ var vue = new Vue({
         newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
         priorities: ['red', 'orange', 'white'],
         showFinishedTasks: false,
-        todayDate: ''
+        todayDate: '',
+        dateFilter: 'today'
     },
     mounted: function () {
         this.fetchProjectsList();
@@ -122,20 +127,26 @@ var vue = new Vue({
         initDate: function () {
             // fills newTask date for example
             // need for Mozilla because it not fully supports html5 <input type=date>
-            var date = new Date;
-            var year = date.getFullYear().toString(10);
-            var month = (date.getMonth() + 1).toString(10);
-            if (month.length == 1) { month = '0' + month }
-            var day = date.getDate().toString(10);
-            if (day.length == 1) { day = '0' + day }
-            this.todayDate = this.newTask.finish_date = year + '-' + month + '-' + day
+            this.todayDate = this.newTask.finish_date = parseDate(new Date)
         },
         reorderTasks : function(tasks) {
             return tasks
         },
         filterTask: function(task){
-            return (!task.finished || this.showFinishedTasks) &&
-                (this.highlightedProject == 'all' || task.project_id == this.highlightedProject)
+            // filter by date:
+            var date = new Date;
+            var today = parseDate(date);
+            date.setDate(date.getDate() + 7); // add 7 days from today
+            var todayPlus7 = parseDate(date);
+            // date conditions:
+            var dateFilter = (this.dateFilter == 'today' && task.finish_date == today) ||
+                (this.dateFilter == 'sevenDays' && task.finish_date < todayPlus7 && task.finish_date >= today) ||
+                this.dateFilter == 'all' || task.deadline;
+            // task finished conditions:
+            var finishedFilter = (!task.finished || this.showFinishedTasks) &&
+                (this.highlightedProject == 'all' || task.project_id == this.highlightedProject);
+
+            return dateFilter && finishedFilter
         }
     },
     computed: {

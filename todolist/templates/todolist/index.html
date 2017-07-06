@@ -82,7 +82,17 @@
 
     <div id="tasks-column">
         <ul>
-            <li>Tasks:</li>
+            <li>
+                Date filter:
+                <input id="allTasks" type="radio" value="all" v-model="dateFilter">
+                <label for="allTasks">All dates</label>
+
+                <input id="todayTasks" type="radio" value="today" v-model="dateFilter">
+                <label for="todayTasks">Today</label>
+
+                <input id="sevenDays" type="radio" value="sevenDays" v-model="dateFilter">
+                <label for="sevenDays">Next 7 days</label>
+            </li>
             <hr>
             <li v-for="task in reorderedTasks" v-if="filterTask(task)">
                 {# Form to edit existing task. #}
