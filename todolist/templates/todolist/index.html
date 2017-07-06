@@ -24,7 +24,10 @@
 
     <div id="projects-column">
         <ul>
-            <li>Projects:</li>
+            <li>
+                <input id="allProjects" type="radio" value="all" v-model="highlightedProject">
+                <label for="allProjects">All projects:</label>
+            </li>
             <hr>
             <li v-for="project in projectsList">
                 {# Form to edit existing project. #}
@@ -42,10 +45,11 @@
                 </span>
                 {# show existing project #}
                 <span v-else class="item-wrapper">
-                    <span>
-                        <div class="circle" :style="{backgroundColor: project.colour}"></div>
+                    <input type="radio" :id="project.id" :value="project.id" v-model="highlightedProject">
+                    <label :for="project.id">
+                        <span class="circle" :style="{backgroundColor: project.colour}"></span>
                         [[ project.name ]]
-                    </span>
+                    </label>
                     {# 'Edit' and 'delete' icons from 'font-awesome' pack. #}
                     <span class="hidden">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"
@@ -80,7 +84,7 @@
         <ul>
             <li>Tasks:</li>
             <hr>
-            <li v-for="task in reorderedTasks" v-if="(!task.finished || showFinishedTasks)">
+            <li v-for="task in reorderedTasks" v-if="filterTask(task)">
                 {# Form to edit existing task. #}
                 <form v-if="task.edit" @submit.prevent="updateTask(task)">
                     <select v-model="task.priority" class="color-select"

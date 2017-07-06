@@ -20,6 +20,13 @@
     min-width: 320px;
 }
 
+input:checked + label {
+    background: #fc0;
+   }
+input[type=radio] {
+  visibility: hidden;
+}
+
 #tasks-column {
     width: 60%;
     background-color: white;

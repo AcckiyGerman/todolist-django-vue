@@ -28,6 +28,7 @@ var vue = new Vue({
     el: '#todolist_spa',
     data : {
         projectsList: [],
+        highlightedProject: 'all',
         newProject: {name: '', colour: 'blue', edit: false},
         colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white'],
         tasksList: [],
@@ -131,6 +132,10 @@ var vue = new Vue({
         },
         reorderTasks : function(tasks) {
             return tasks
+        },
+        filterTask: function(task){
+            return (!task.finished || this.showFinishedTasks) &&
+                (this.highlightedProject == 'all' || task.project_id == this.highlightedProject)
         }
     },
     computed: {
