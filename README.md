@@ -6,24 +6,16 @@ The app uses django authentication system.
 
 #### Local setup in debian/ubuntu:
 ```bash
-git clone https://github.com/AcckiyGerman/django-todolist/  
-cd django-todolist
+git clone https://github.com/AcckiyGerman/todolist-django-vue.git  
+cd todolist-django-vue
 ```
-#### Create virtual environment:
-Either by python utility:  
+#### Create and load virtual environment:
+By python utility:  
 ```bash
 sudo apt install python3-venv  
 python3 -m venv venv
+source venv/bin/activate
 ```
-
-Or using virtualenv:  
-```
-sudo apt install virtualenv  
-virtualenv venv  
-```
-#### load environment:
-`source venv/bin/activate`  
-
 #### initialize project:
 ```bash
 pip install -r requirements.txt
