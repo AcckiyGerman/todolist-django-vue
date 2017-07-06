@@ -17,7 +17,8 @@ function jsonToServer(address, data, successFunction) {
                 data: JSON.stringify(data),
                 success: successFunction,
                 error: function(errMsg) {
-                    alert(errMsg.responseText);
+                    if (errMsg.responseText) alert(errMsg.responseText);
+                    else alert('Server not responding.')
                 }
             })
         }
