@@ -7,13 +7,14 @@ import json
 import datetime
 
 
-# Create your views here.
+# Give the Single page application to user
 @login_required
 def index(request):
     context = {}
     return render(request, 'todolist/index.html', context)
 
 
+# Json API views:
 def projects_list(request):
     """returns all projects in json format"""
     json_data = json.dumps(

@@ -23,9 +23,8 @@ function jsonToServer(address, data, successFunction) {
             })
         }
 function parseDate(date){
-    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1))
-        .slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
-};
+    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
+}
 
 var vue = new Vue({
     delimiters: ['[[', ']]'],
@@ -36,23 +35,20 @@ var vue = new Vue({
         newProject: {name: '', colour: 'blue', edit: false},
         colors: ['red', 'orange', 'yellow', 'green', 'lightblue', 'blue', 'violet', 'white'],
         tasksList: [],
-        newTask: {name: '', project_id: 0, priority: 'orange', finish_date: '', finished: false, edit: false},
+        newTask: {name: '', project_id: 0, priority: 'orange', finish_date: parseDate(new Date), finished: false, edit: false},
         priorities: ['red', 'orange', 'white'],
         showFinishedTasks: false,
-        todayDate: '',
         dateFilter: 'today'
     },
     mounted: function () {
         this.fetchProjectsList();
         this.fetchTasksList();
-        this.initDate();
     },
     methods: {
         fetchProjectsList: function (filter) {
             var self = this;
             jsonToServer('/projects_list/', {filter: filter}, function (projects) {
                 console.log('Got projects list from server: ', projects);
-                console.log('Adding "edit=false" flag to each project.');
                 self.projectsList = []; // clear projects list
                 projects.forEach(function(project){
                     // project.edit - when true - will show project edit form (using vue v-if)
@@ -62,8 +58,8 @@ var vue = new Vue({
             })
         },
         newProjectInputHandler: function (event) {
-            if (event.key == 'Enter'){ this.addProject() }
-            if (event.key == 'Escape') { this.newProject.edit = false }
+            if (event.key == 'Enter') this.addProject();
+            if (event.key == 'Escape') this.newProject.edit = false
         },
         addProject: function () {
             var self = this;
@@ -71,6 +67,7 @@ var vue = new Vue({
                 console.log('successfully uploaded new project:', project);
                 project.edit = false;  // add 'edit' field, need to vue v-bind proper work
                 self.projectsList.push(project);
+                // restore and hide 'addNewProject' form
                 self.newProject.name = '';
                 self.newProject.edit = false;
             })
@@ -118,22 +115,13 @@ var vue = new Vue({
             });
         },
         deleteTask: function (task) {
-            console.log('trying to delete task:', task.name);
-            jsonToServer('/delete_task/', task.id, function(response) {
+                console.log('trying to delete task:', task.name);
+                jsonToServer('/delete_task/', task.id, function(response) {
                 console.log('server reply:', response);
             });
             this.fetchTasksList();
         },
-        initDate: function () {
-            // fills newTask date for example
-            // need for Mozilla because it not fully supports html5 <input type=date>
-            this.todayDate = this.newTask.finish_date = parseDate(new Date)
-        },
-        reorderTasks : function(tasks) {
-            return tasks
-        },
         filterTask: function(task){
-            // filter by date:
             var date = new Date;
             var today = parseDate(date);
             date.setDate(date.getDate() + 7); // add 7 days from today
@@ -141,7 +129,8 @@ var vue = new Vue({
             // date conditions:
             var dateFilter = (this.dateFilter == 'today' && task.finish_date == today) ||
                 (this.dateFilter == 'sevenDays' && task.finish_date < todayPlus7 && task.finish_date >= today) ||
-                this.dateFilter == 'all' || task.deadline;
+                this.dateFilter == 'all' ||
+                task.deadline;  // show missed deadlines anyway
             // task finished conditions:
             var finishedFilter = (!task.finished || this.showFinishedTasks) &&
                 (this.highlightedProject == 'all' || task.project_id == this.highlightedProject);
@@ -152,19 +141,19 @@ var vue = new Vue({
     computed: {
         reorderedTasks: function() {
             var tasks = this.tasksList;
-            var self = this;
             // mark missed deadlines
+            var today = parseDate(new Date);
             tasks.forEach(function (task) {
-                if ( !task.finished && task.finish_date < self.todayDate ) { task.deadline = true }
-                else { task.deadline = false }
+                if ( !task.finished && task.finish_date < today ) task.deadline = true;
+                else task.deadline = false;
             });
             return tasks.sort(function (taskA, taskB) {
                 // sort by deadline
-                if (taskA.deadline > taskB.deadline){ return -1 }
-                if (taskA.deadline < taskB.deadline){ return 1 }
+                if (taskA.deadline > taskB.deadline) return -1;
+                if (taskA.deadline < taskB.deadline) return 1;
                 // finished lower then unfinished:
-                if (!taskA.finished && taskB.finished){ return -1 }
-                if (taskA.finished && !taskB.finished){ return 1 }
+                if (!taskA.finished && taskB.finished) return -1;
+                if (taskA.finished && !taskB.finished) return 1;
                 // sort by priority
                 var P = {red: 10, orange: 5, white: 1};
                 return P[taskA.priority] < P[taskB.priority];
